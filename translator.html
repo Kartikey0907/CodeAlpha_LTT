@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A1 Translator | AI Workspace</title>
+    <link rel="stylesheet" href="translator.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+
+<div class="gemini-app">
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="brand">
+                <svg class="sparkle-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.85 9.15L22 12L14.85 14.85L12 22L9.15 14.85L2 12L9.15 9.15L12 2Z"/></svg>
+                <span>A1 Translator</span>
+            </div>
+            <button class="new-chat-btn" data-target="translator-view">
+                <span>+</span> New translation
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <div class="nav-item active" data-target="translator-view">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>AI Studio</span>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <span class="section-title">Saved Sessions</span>
+                <ul id="sidebar-history" class="history-links">
+                    <span class="no-history">No recents yet</span>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="nav-item" data-target="settings-view">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Settings</span>
+            </div>
+            <div class="user-profile nav-item" data-target="profile-view">
+                <div class="avatar dynamic-avatar">G</div>
+                <div class="user-meta">
+                    <span class="user-name dynamic-username">Guest</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="workspace">
+        <header class="top-nav">
+            <div class="view-indicator">Engine: <span class="active-model-text">A1 Cloud Native</span></div>
+            <button class="upgrade-badge">✦ Upgrade Pro</button>
+        </header>
+
+        <section id="translator-view" class="app-view active">
+            <div class="card-layout">
+                <div class="lang-selector-row">
+                    <select id="source-lang" class="minimal-select">
+                        <option value="en-GB">English</option>
+                        <option value="hi-IN">Hindi (हिन्दी)</option>
+                        <option value="bn-IN">Bengali (বাংলা)</option>
+                        <option value="te-IN">Telugu (తెలుగు)</option>
+                        <option value="mr-IN">Marathi (మరాठी)</option>
+                        <option value="ta-IN">Tamil (தமிழ்)</option>
+                        <option value="ur-PK">Urdu (اردو)</option>
+                        <option value="ja-JP">Japanese (日本語)</option>
+                        <option value="es-ES">Spanish</option>
+                        <option value="fr-FR">French</option>
+                        <option value="de-DE">German</option>
+                    </select>
+                    <button id="swap-languages-btn" class="action-circle">⇄</button>
+                    <select id="target-lang" class="minimal-select">
+                        <option value="hi-IN">Hindi (हिन्दी)</option>
+                        <option value="en-GB">English</option>
+                        <option value="bn-IN">Bengali (বাংলা)</option>
+                        <option value="te-IN">Telugu (తెలుగు)</option>
+                        <option value="mr-IN">Marathi (మరాठी)</option>
+                        <option value="ta-IN">Tamil (தமிழ்)</option>
+                        <option value="ur-PK">Urdu (اردو)</option>
+                        <option value="ja-JP">Japanese (日本語)</option>
+                        <option value="es-ES">Spanish</option>
+                        <option value="fr-FR">French</option>
+                        <option value="de-DE">German</option>
+                    </select>
+                </div>
+
+                <div class="interactive-grid">
+                    <div class="terminal-pane">
+                        <textarea id="source-input" placeholder="Enter text, use voice, or upload an image..."></textarea>
+                        <div class="pane-footer">
+                            <span class="char-counter">0 / 2000</span>
+                            <div class="footer-button-group">
+                                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                                <label for="image-upload" class="footer-icon" title="Extract text from photo">📷</label>
+                                <button id="voice-input-btn" class="footer-icon mic-icon" title="Speak into microphone">🎤</button>
+                                <button id="listen-source-btn" class="footer-icon" title="Listen">🔊</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terminal-pane output-pane">
+                        <textarea id="target-output" placeholder="Translation will display here..." readonly></textarea>
+                        <div class="pane-footer right-align">
+                            <button id="copy-text-btn" class="footer-icon" title="Copy">📋</button>
+                            <button id="listen-target-btn" class="footer-icon" title="Listen">🔊</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="trigger-translation-btn" class="gemini-btn">
+                    <span>Translate Text</span>
+                    <div class="loader hidden"></div>
+                </button>
+            </div>
+        </section>
+
+        <section id="settings-view" class="app-view">
+            <div class="card-layout">
+                <h3 class="panel-heading">A1 Engine Core Settings</h3>
+                <div class="setting-block">
+                    <div class="setting-info">
+                        <label>Active API Gateway</label>
+                        <p>Toggle your translation microservice provider.</p>
+                    </div>
+                    <select id="engine-select" class="minimal-select fixed-width">
+                        <option value="gtx">A1 Cloud Native (Free & Fast)</option>
+                        <option value="gemini">Google Gemini AI Engine (API)</option>
+                        <option value="google">Google Translate Official API</option>
+                        <option value="microsoft">Microsoft Azure Cognitive</option>
+                    </select>
+                </div>
+                <div class="setting-block">
+                    <div class="setting-info">
+                        <label>Voice Playback Speed</label>
+                        <p>Adjust text-to-speech voice engine pacing.</p>
+                    </div>
+                    <input type="range" id="speech-rate" min="0.5" max="1.5" step="0.1" value="0.9" class="range-slider">
+                </div>
+            </div>
+        </section>
+
+        <section id="profile-view" class="app-view">
+            <div class="card-layout">
+                <h3 class="panel-heading">Account Overview & Console</h3>
+                
+                <div class="profile-details">
+                    <div class="big-avatar dynamic-avatar">G</div>
+                    <div class="details">
+                        <h4 id="display-profile-name" class="dynamic-username">Guest User</h4>
+                        <p id="display-profile-meta" class="dynamic-tier">Tier: Guest Access</p>
+                        <span class="token-count">Translations cached: <b id="stats-total-count">0</b></span>
+                    </div>
+                    <div class="profile-action-cluster">
+                        <button id="edit-profile-toggle-btn" class="gemini-btn small-btn secondary-btn">Edit Profile</button>
+                        <button id="auth-portal-trigger-btn" class="gemini-btn small-btn">Sign In / Sign Up</button>
+                    </div>
+                </div>
+
+                <div id="editable-profile-block" class="interactive-profile-form hidden-element">
+                    <h4 class="sub-form-heading">Update Workspace Identity</h4>
+                    <div class="form-grid-row">
+                        <div class="form-group">
+                            <label>Display Username</label>
+                            <input type="text" id="edit-user-name" class="premium-input" placeholder="Change display moniker...">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Tier Access</label>
+                            <select id="edit-user-tier" class="minimal-select broad-select">
+                                <option value="Guest Access">Guest Access</option>
+                                <option value="A1 Cloud Developer">A1 Cloud Developer</option>
+                                <option value="Enterprise Specialist">Enterprise Specialist</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+                        <button id="cancel-profile-edit" class="danger-outline-btn" style="padding: 8px 16px;">Cancel</button>
+                        <button id="save-profile-edit" class="gemini-btn small-btn">Save Changes</button>
+                    </div>
+                </div>
+
+                <div class="profile-notice">
+                    <span class="notice-icon">💡</span>
+                    <p>For better results, lower request latency, and high-volume translations, enter your custom API keys below.</p>
+                </div>
+
+                <div class="interactive-profile-form">
+                    <div class="form-group">
+                        <label for="profile-engine-select">Default Engine Version</label>
+                        <select id="profile-engine-select" class="minimal-select broad-select">
+                            <option value="gtx">A1 Cloud Native (Free & Fast)</option>
+                            <option value="gemini">Google Gemini AI Engine (API)</option>
+                            <option value="google">Google Translate Official API</option>
+                            <option value="microsoft">Microsoft Azure Cognitive</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-gemini-key">Gemini AI Studio Secret Key</label>
+                        <input type="password" id="profile-gemini-key" class="premium-input" placeholder="Enter your Gemini API Key...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-google-key">Google Cloud API Secret Key</label>
+                        <input type="password" id="profile-google-key" class="premium-input" placeholder="Enter your Google Translation API Key...">
+                    </div>
+
+                    <div class="form-grid-row">
+                        <div class="form-group">
+                            <label for="profile-azure-key">Azure Cognitive Key</label>
+                            <input type="password" id="profile-azure-key" class="premium-input" placeholder="Enter Azure Key...">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-azure-region">Azure Location Region</label>
+                            <input type="text" id="profile-azure-region" class="premium-input" placeholder="e.g., centralindia, eastus">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons-row">
+                    <button id="clear-history-btn" class="danger-outline-btn">Wipe Application Logs</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div id="auth-modal-backdrop" class="auth-modal-overlay hidden-element">
+    <div class="auth-modal-window">
+        <div class="auth-modal-header">
+            <h3 id="auth-modal-title">Sign In to Your Workspace</h3>
+            <button id="close-auth-modal" class="auth-close-x">&times;</button>
+        </div>
+        
+        <form id="auth-interactive-form">
+            <div class="form-group" style="margin-bottom: 14px;">
+                <label>Email Address or Phone Number</label>
+                <input type="text" id="auth-login-identifier" class="premium-input" placeholder="name@domain.com or +1234567890" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>Password</label>
+                <input type="password" id="auth-login-password" class="premium-input" placeholder="••••••••" required>
+            </div>
+            
+            <button type="submit" id="auth-primary-submit-btn" class="gemini-btn">Sign In</button>
+        </form>
+
+        <div class="auth-modal-footer">
+            <span id="auth-switch-prompt-text">Don't have an account yet?</span>
+            <span id="auth-toggle-mode-action" class="interactive-link">Create Account</span>
+        </div>
+    </div>
+</div>
+
+<script src="translator.js"></script>
+</body>
+</html>
