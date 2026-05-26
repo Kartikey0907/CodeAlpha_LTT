@@ -1,5 +1,5 @@
 # CodeAlpha_LTT
-# A1 Translator | AI Workspace 🚀
+# A1 Translator | AI Workspace 
 
 A streamlined, cloud-native translation workspace built with modern JavaScript, CSS, and HTML. This workspace allows users to seamlessly translate text across multiple languages using either the fast cloud native proxy engine or through custom developer endpoints (Google Gemini, Google Cloud Translation, and Microsoft Azure Cognitive Services).
 
@@ -7,7 +7,7 @@ The application features instant inline **Profile Editing**, built-in **Optical 
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 * **Multi-Engine Architecture:** Switch on-the-fly between a lightning-fast native engine and advanced premium LLM systems (Google Gemini Pro, Azure, Google Official API).
 * **Secure Client-Side Vault:** Enter and save your private API keys locally. Keys stay isolated inside your browser's encrypted space and are never transmitted to a third-party server.
@@ -37,7 +37,7 @@ This is a **serverless, client-side application**. It requires no complicated co
 
 ---
 
-## 🔒 Security Best Practices
+##  Security Best Practices
 
 > [!IMPORTANT]
 > Because this application runs strictly on the client side inside the browser, **do not hardcode your API keys directly into the source code (`translator.js`)**. 
